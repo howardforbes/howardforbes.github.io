@@ -101,8 +101,8 @@
         <div class="col-lg-8 mx-auto">
           <h2 class="text-primary">Contact</h2>
           <ul class="list-group">
-            <li class="list-group-item">howard.d.forbes@outlook.com</li>
-            <li class="list-group-item"><a href="https://www.linkedin.com/in/howard-forbes-735a1810b/">LinkedIn Account</a></li>
+            <li class="list-group-item">Email: howard.d.forbes@outlook.com</li>
+            <li class="list-group-item"><a href="https://www.linkedin.com/in/howard-forbes-735a1810b?trk=people-guest_profile-result-card_result-card_full-click">LinkedIn Account</a></li>
             <li class="list-group-item"><a href="https://github.com/howardforbes">GitHub Account</a></li>
           </ul>
         </div>
@@ -115,9 +115,164 @@
       <div class="row">
         <div class="col-lg-8 mx-auto">
           <h2 class="text-primary">Projects</h2>
-          <p class="lead">JavaScript Project:&nbsp;&nbsp;<a href="https://github.com/howardforbes/The-Tech-Academy-JavaScript-Coding-Projects/blob/master/bootstrap_pizza_menu.html" class="badge badge-primary">Click Here</a></p>
-          <p class="lead">SQL Project:&nbsp;&nbsp;<a href="https://github.com/howardforbes/The-Tech-Academy-SQL-Coding-Projects/tree/master/Final%20Drill" class="badge badge-primary">Click Here</a></p>
-          <p class="lead">ASP.NET MVC Project:&nbsp;&nbsp;<a href="https://github.com/howardforbes/The-Tech-Academy-Basic-C-Sharp-Projects/tree/master/MVCFinalExercise" class="badge badge-primary">Click Here</a></p>
+                           
+          <div class="card">
+            <div class="card-header">
+              Project
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">JavaScript Project</h5>
+              <p class="card-text">We designed a Pizza calculator that let the user choose the ingredients they would like to have on their pizza and then returned the total price.</p>
+              <a href="https://github.com/howardforbes/The-Tech-Academy-JavaScript-Coding-Projects/blob/master/bootstrap_pizza_menu.html" class="btn btn-primary">View Code</a>
+            </div>
+          </div>
+
+          <br /><br />
+
+          <div class="card">
+            <div class="card-header">
+              Project
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">SQL Project</h5>
+              <p class="card-text">We implemented a Library database using SQL Server.  It was created from an ER diagram and populated with data. We then created seven stored procedures to read the data. </p>
+              <a href="https://github.com/howardforbes/The-Tech-Academy-SQL-Coding-Projects/tree/master/Final%20Drill" class="btn btn-primary">View Code</a>
+            </div>
+          </div>
+
+          <br /><br />
+
+          <div class="card">
+            <div class="card-header">
+              Project
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">ASP.NET MVC Project</h5>
+              <p class="card-text">This was a basic CRUD application.</p>
+              <a href="https://github.com/howardforbes/The-Tech-Academy-Basic-C-Sharp-Projects/tree/master/MVCFinalExercise" class="btn btn-primary">View Code</a>
+            </div>
+          </div>
+
+          <br /><br />
+
+          <div class="card">
+            <div class="card-header">
+              Project
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Live Project</h5>
+              <p class="card-text">
+                The Live Project was a two-week project where we were assigned to a team of developers 
+                (students) to work on a piece of software called the Management Portal.  User Stories
+                 had been created by the project leads that ranged from UI changes to back-end changes
+                 and enhancements.  I chose to work on a number of User Stories both UI and changes to
+                 the C# code base.  I learned a great deal about working on a team, doing research, and
+                 thinking outside-the-box when working on a story that was new and challenging.
+                 I also learned about version control and conflict resolution while interacting
+                 with Azure DevOps for configuration management of the project.  I will showcase two
+                 of the User Stories that I had a chance to work on.
+              </p>
+              <h5 class="card-title">User Story One</h5>
+              <p class="card-text">
+                One User Story I selected was to create a view that listed the jobs that a manager
+                was assigned to.  Part of this story was to use ASP.NET Identity to discover
+                the current user that was logged in and query the jobs that were assigned to them.
+                Here is a code sample from the code that I worked on:
+              </p>
+              <pre>
+    public ActionResult ManagedList(string sortOrder, string currentFilter, string searchString, int? page)
+    {
+        ViewBag.CurrentSort = sortOrder;
+        ViewBag.TitleSortParm = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+        ViewBag.TypeSortParm = string.IsNullOrEmpty(sortOrder) ? "type_desc" : "";
+        ViewBag.ActiveSortParm = string.IsNullOrEmpty(sortOrder) ? "active_desc" : "";
+
+        if (searchString != null)
+        {
+            page = 1;
+        }
+        else
+        {
+            searchString = currentFilter;
+        }
+
+        ViewBag.CurrentFilter = searchString;
+
+        var jobs = db.Jobs.Where(j => j.Manager.UserName == User.Identity.Name);
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            jobs = jobs.Where(s => s.JobTitle.Contains(searchString)
+            || s.JobType.Contains(searchString));
+        }
+        switch (sortOrder)
+        {
+            case "title_desc":
+                jobs = jobs.OrderByDescending(s => s.JobTitle);
+                break;
+            case "type_desc":
+                jobs = jobs.OrderByDescending(s => s.JobType);
+                break;
+            case "active_desc":
+                jobs = jobs.OrderByDescending(s => s.Active);
+                break;
+            default:
+                jobs = jobs.OrderBy(s => s.JobTitle);
+                break;
+
+        }
+        int pageSize = 2;
+        int pageNumber = (page ?? 1);
+        return View(jobs.ToPagedList(pageNumber, pageSize));
+    }
+
+              </pre>
+              <h5 class="card-title">User Story Two</h5>
+              <p class="card-text">
+                The second User Story was to add a PDF export functionality to all 
+                pages of the application.  This entailed using the iTextSharp framework.
+                I found using this framework still left some unforeseen errors when generating
+                the HTML from the view and I had to use the HTMLAgilityPack to add closing tags
+                to malformed HTML.  The code leverages a div tag and a JQuery method to generate
+                the appropriate HTML for export.  Here is the code snippet:
+              </p>
+              <pre>
+    [HttpPost]
+    [ValidateInput(false)]
+    public FileResult Export(string ExportData)
+    {
+        HtmlNode.ElementsFlags["img"] = HtmlElementFlag.Closed;
+        HtmlNode.ElementsFlags["input"] = HtmlElementFlag.Closed;
+        HtmlNode.ElementsFlags["br"] = HtmlElementFlag.Closed;
+        HtmlDocument doc = new HtmlDocument();
+        doc.OptionFixNestedTags = true;
+        doc.LoadHtml(ExportData);
+        ExportData = doc.DocumentNode.OuterHtml;
+
+        using (MemoryStream stream = new System.IO.MemoryStream())
+        {
+            Encoding unicode = Encoding.UTF8;
+            StringReader sr = new StringReader(ExportData);
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+            pdfDoc.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+            pdfDoc.Close();
+            return File(stream.ToArray(), "application/pdf", "PDFExport.pdf");
+        }
+    }
+              </pre>
+              <p class="card-text">
+                I also worked on a number of UI stories ranging from styling forms to adding
+                and positioning elements within a form using Bootstrap classes.  My only regret
+                is that I did not chose more challenging stories because I learned so much from
+                the stories I did choose.  I learned that it is good to try and stretch yourself
+                because you learn so much.
+              </p>
+             
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
